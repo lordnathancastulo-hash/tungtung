@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>read this hahaha</title>
+<link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Cormorant+Garamond:ital,wght@0,400;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    font-family: 'Cormorant Garamond', serif;
+    background: #1a0f00;
+  }
+
+  /* ── BACKGROUND ── */
+  .bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .sky {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, #1c2a4a 0%, #3d4f6e 35%, #c8956c 65%, #e8b87a 80%, #f0c97a 100%);
+  }
+
+  .sun {
+    position: absolute;
+    bottom: 32%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px; height: 80px;
+    background: radial-gradient(circle, #fff8c0 0%, #f5c842 40%, #e8983a 100%);
+    border-radius: 50%;
+    box-shadow: 0 0 60px 30px rgba(245,200,66,0.3), 0 0 120px 60px rgba(232,152,58,0.15);
+  }
+
+  /* Buildings SVG background */
+  .buildings {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 55%;
+  }
+
+  .ground {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 18%;
+    background: #1a0e05;
+  }
+
+  /* Cobblestone road */
+  .road {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 12%;
+    background: repeating-linear-gradient(
+      90deg,
+      #2a1e10 0px, #2a1e10 18px,
+      #3a2a18 18px, #3a2a18 20px
+    );
+    background-color: #2a1e10;
+  }
+
+  /* ── SCREEN 1: AIRPODS ── */
+  #screen-intro {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(10, 5, 0, 0.88);
+    backdrop-filter: blur(4px);
+    transition: opacity 1.2s ease, visibility 1.2s ease;
+  }
+
+  #screen-intro.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .intro-seal {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    border: 2px solid #c9a84c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2rem;
+    animation: pulse-seal 2.5s ease-in-out infinite;
+  }
+
+  @keyframes pulse-seal {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(201,168,76,0.3); }
+    50% { box-shadow: 0 0 0 12px rgba(201,168,76,0); }
+  }
+
+  .intro-seal svg { width: 50px; height: 50px; }
+
+  .intro-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    color: #c9a84c;
+    text-transform: uppercase;
+    margin-bottom: 1.2rem;
+  }
+
+  .intro-title {
+    font-family: 'Pinyon Script', cursive;
+    font-size: clamp(2.5rem, 7vw, 5rem);
+    color: #f5e6c0;
+    text-align: center;
+    line-height: 1.1;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 2px 20px rgba(201,168,76,0.25);
+  }
+
+  .intro-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1rem;
+    color: #a08860;
+    margin-bottom: 3rem;
+    letter-spacing: 0.05em;
+  }
+
+  .btn-ready {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #1a0f00;
+    background: linear-gradient(135deg, #e8c96a, #c9a84c, #b8973d);
+    border: none;
+    padding: 0.85rem 2.8rem;
+    cursor: pointer;
+    border-radius: 2px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 20px rgba(201,168,76,0.3);
+  }
+
+  .btn-ready::before {
+    content: '';
+    position: absolute;
+    inset: 1px;
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 1px;
+    pointer-events: none;
+  }
+
+  .btn-ready:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(201,168,76,0.45);
+  }
+
+  .btn-ready:active { transform: translateY(0); }
+
+  /* ── SCENE ── */
+  #scene {
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 1.5s ease;
+    pointer-events: none;
+  }
+
+  #scene.visible {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  /* ── ENVELOPE ── */
+  #envelope-wrap {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+
+  #envelope-wrap:hover { transform: scale(1.03) translateY(-4px); }
+
+  .env-hint {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    color: #f5e6c0;
+    font-size: 1rem;
+    margin-bottom: 1.4rem;
+    letter-spacing: 0.08em;
+    opacity: 0.85;
+    animation: float-hint 3s ease-in-out infinite;
+  }
+
+  @keyframes float-hint {
+    0%, 100% { transform: translateY(0); opacity: 0.85; }
+    50% { transform: translateY(-5px); opacity: 1; }
+  }
+
+  .envelope {
+    width: min(340px, 88vw);
+    height: min(240px, 60vw);
+    position: relative;
+    filter: drop-shadow(0 20px 60px rgba(0,0,0,0.7));
+  }
+
+  .env-body {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(160deg, #d4a96a 0%, #c49050 30%, #b07a3a 100%);
+    border-radius: 4px;
+    border: 1px solid #8a5a20;
+  }
+
+  /* Envelope texture */
+  .env-body::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(45deg, transparent, transparent 3px, rgba(255,255,255,0.03) 3px, rgba(255,255,255,0.03) 4px),
+      repeating-linear-gradient(-45deg, transparent, transparent 3px, rgba(0,0,0,0.03) 3px, rgba(0,0,0,0.03) 4px);
+    border-radius: 4px;
+  }
+
+  /* Envelope bottom flap lines */
+  .env-body::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 55%;
+    background: linear-gradient(135deg, #b87838 0%, transparent 50%),
+                linear-gradient(225deg, #b87838 0%, transparent 50%);
+    opacity: 0.35;
+    border-radius: 0 0 4px 4px;
+  }
+
+  .env-flap {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 0;
+    border-left: calc(min(340px, 88vw) / 2) solid transparent;
+    border-right: calc(min(340px, 88vw) / 2) solid transparent;
+    border-top: calc(min(240px, 60vw) * 0.42) solid #c4923e;
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));
+    transform-origin: top center;
+    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 5;
+  }
+
+  .env-flap.open {
+    transform: rotateX(180deg);
+  }
+
+  .env-seal {
+    position: absolute;
+    top: 38%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 44px;
+    height: 44px;
+    background: radial-gradient(circle, #8b1a1a, #6b0f0f);
+    border-radius: 50%;
+    border: 2px solid #a02020;
+    z-index: 6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    transition: opacity 0.4s ease;
+  }
+
+  .env-seal.hidden { opacity: 0; }
+
+  .env-seal::before {
+    content: '❧';
+    font-size: 18px;
+    color: #f5c0a0;
+  }
+
+  .env-address {
+    position: absolute;
+    bottom: 22%;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .env-address span {
+    font-family: 'Pinyon Script', cursive;
+    font-size: 1.35rem;
+    color: #3a1c05;
+    text-shadow: 1px 1px 0 rgba(255,255,255,0.1);
+  }
+
+  .env-stamp {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    width: 36px;
+    height: 44px;
+    background: linear-gradient(135deg, #8b4513, #6b3010);
+    border: 2px solid #5a2808;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    line-height: 1;
+    box-shadow: inset 0 0 0 3px rgba(255,255,255,0.08), 0 2px 6px rgba(0,0,0,0.4);
+  }
+
+  .env-stamp::before {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    border: 2px dashed #4a2008;
+    border-radius: 2px;
+  }
+
+  /* ── LETTER ── */
+  #letter-wrap {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: flex;
+    align-items: flex-start;
+padding-top: 20px;
+    justify-content: center;
+    background: rgba(5, 2, 0, 0.7);
+    backdrop-filter: blur(3px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.8s ease;
+    padding: 1rem;
+    overflow-y: auto;
+  }
+
+  #letter-wrap.visible {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .letter-paper {
+   position: relative;
+    width: min(850px, 95vw);
+    max-height: 90vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+     -webkit-overflow-scrolling: touch;
+    padding: 2rem;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E"),
+      linear-gradient(160deg, #e8d5a3 0%, #d4b87a 25%, #c9aa6a 50%, #d8c08a 75%, #e2cc90 100%);
+    border-radius: 2px;
+    box-shadow:
+      0 30px 100px rgba(0,0,0,0.7),
+      0 0 0 1px rgba(100,60,10,0.3),
+      inset 0 0 40px rgba(120,70,10,0.15),
+      inset 0 0 80px rgba(80,40,5,0.08);
+    transform: translateY(60px) scale(0.95);
+    transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.8s ease;
+    opacity: 0;
+
+    /* Wrinkle effect via skewed pseudo */
+    overflow: hidden;
+  }
+
+  .letter-paper::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 28px, rgba(100,60,10,0.06) 28px, rgba(100,60,10,0.06) 29px);
+    pointer-events: none;
+    border-radius: 2px;
+  }
+
+  /* Wrinkles */
+  .letter-paper::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background:
+      linear-gradient(73deg, transparent 42%, rgba(80,40,5,0.06) 43%, transparent 44%),
+      linear-gradient(108deg, transparent 38%, rgba(80,40,5,0.05) 39%, transparent 40%),
+      linear-gradient(25deg, transparent 65%, rgba(80,40,5,0.04) 66%, transparent 67%);
+    pointer-events: none;
+    border-radius: 2px;
+  }
+
+  #letter-wrap.visible .letter-paper {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+
+  .letter-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    position: relative;
+  }
+
+  .letter-flourish {
+    font-family: 'Pinyon Script', cursive;
+    font-size: 1.6rem;
+    color: #5a3010;
+    opacity: 0.55;
+    line-height: 1;
+    margin-bottom: 0.3rem;
+  }
+
+  .letter-date {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 0.85rem;
+    color: #7a4a1a;
+    letter-spacing: 0.12em;
+    margin-bottom: 0.5rem;
+  }
+
+  .letter-divider {
+    width: 60%;
+    margin: 0 auto;
+    border: none;
+    border-top: 1px solid rgba(100,60,10,0.25);
+  }
+
+  .letter-body {
+    font-family: 'Pinyon Script', cursive;
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: #2a1505;
+    line-height: 1.9;
+    text-align: left;
+    position: relative;
+    z-index: 1;
+     transform: translateY(-2px);
+  text-shadow: 0 1px 0 rgba(255,255,255,0.25);
+  }
+
+  .letter-body .salutation {
+    font-size: clamp(1.4rem, 3.5vw, 1.9rem);
+    margin-bottom: 0.6rem;
+    display: block;
+  }
+
+  .letter-body p {
+    margin-bottom: 1.1rem;
+    text-indent: 2em;
+  }
+
+  .letter-body .closing {
+    text-indent: 0;
+    margin-top: 1.5rem;
+    margin-bottom: 0;
+  }
+
+  .letter-body .signature {
+    font-size: clamp(1.6rem, 4vw, 2.2rem);
+    text-indent: 0;
+    margin-top: 0.3rem;
+    margin-bottom: 0;
+    color: #1a0d02;
+  }
+
+  .letter-close-btn {
+    position: fixed;
+    top: 1.2rem;
+    right: 1.5rem;
+    background: rgba(30,10,0,0.7);
+    border: 1px solid #c9a84c;
+    color: #c9a84c;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 0.5rem 1.2rem;
+    cursor: pointer;
+    border-radius: 2px;
+    z-index: 200;
+    transition: background 0.2s;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease, background 0.2s;
+  }
+
+  .letter-close-btn.visible {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .letter-close-btn:hover { background: rgba(201,168,76,0.15); }
+
+  /* Music indicator */
+  .music-note {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    z-index: 300;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 0.8rem;
+    color: rgba(201,168,76,0.7);
+    opacity: 0;
+    transition: opacity 1s ease;
+  }
+
+  .music-note.visible { opacity: 1; }
+
+  .note-dot {
+    width: 8px; height: 8px;
+    background: #c9a84c;
+    border-radius: 50%;
+    animation: pulse-dot 1.5s ease-in-out infinite;
+  }
+
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 0.5; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.3); }
+  }
+
+  /* Stars */
+  .stars {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .star {
+    position: absolute;
+    background: #fff;
+    border-radius: 50%;
+    animation: twinkle var(--d, 3s) ease-in-out infinite var(--delay, 0s);
+  }
+
+  @keyframes twinkle {
+    0%, 100% { opacity: var(--min-o, 0.2); }
+    50% { opacity: var(--max-o, 0.9); }
+  }
+
+  /* Particle sparks on click */
+  .spark {
+    position: fixed;
+    pointer-events: none;
+    border-radius: 50%;
+    background: #c9a84c;
+    animation: spark-out 0.6s ease-out forwards;
+    z-index: 999;
+  }
+
+  @keyframes spark-out {
+    0% { transform: scale(1) translate(0,0); opacity: 1; }
+    100% { transform: scale(0) translate(var(--tx), var(--ty)); opacity: 0; }
+  }
+
+  /* Audio controls placeholder */
+  .audio-notice {
+    text-align: center;
+    margin-top: 0.5rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 0.78rem;
+    color: #8a5a1a;
+    opacity: 0.7;
+  }
+
+  .voice-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 500;
+  background: rgba(30,10,0,0.85);
+  border: 1px solid #c9a84c;
+  color: #c9a84c;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 14px;
+  display: none;
+}
+
+.voice-toggle:hover {
+  background: rgba(201,168,76,0.15);
+}
+
+/* FIX: Better mobile scaling for letter */
+@media (max-width: 1024px) {
+  #letter-wrap {
+    align-items: center;
+    padding: 0.5rem;
+  }
+
+  .letter-paper {
+    width: 95vw;
+    max-height: 92vh;
+    padding: 1.2rem;
+    transform: translateY(20px) scale(0.98);
+  }
+}
+
+/* Phones */
+@media (max-width: 600px) {
+  .letter-paper {
+    width: 96vw;
+    max-height: 88vh;
+    padding: 1rem;
+    border-radius: 6px;
+  }
+
+  .letter-body {
+    font-size: 1.05rem;
+    line-height: 1.6;
+  }
+
+  .letter-body .salutation {
+    font-size: 1.5rem;
+  }
+
+  .letter-body .signature {
+    font-size: 1.6rem;
+  }
+}
+
+/* Small phones */
+@media (max-width: 400px) {
+  .letter-paper {
+    padding: 0.9rem;
+  }
+
+  .letter-body {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+}
+
+</style>
+</head>
+<body>
+
+<!-- Hidden audio elements (swap src with real files) -->
+<audio id="bg-music" loop>
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<audio id="voice-audio">
+  <source src="my-voice.mp3" type="audio/mpeg">
+</audio>
+
+<!-- Background -->
+<div class="bg">
+  <div class="sky"></div>
+  <div class="sun"></div>
+
+  <!-- Stars -->
+  <div class="stars" id="stars"></div>
+
+  <!-- Spanish Buildings SVG -->
+  <div class="buildings">
+    <svg viewBox="0 0 1440 500" preserveAspectRatio="xMidYMax meet" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
+      <!-- Far background buildings (lighter, muted) -->
+      <g opacity="0.45">
+        <rect x="60" y="200" width="55" height="300" fill="#1a0e05"/>
+        <rect x="55" y="180" width="65" height="30" fill="#1a0e05"/>
+        <polygon points="88,140 55,180 120,180" fill="#150b03"/>
+        <rect x="70" y="200" width="8" height="14" fill="#3d2510"/>
+        <rect x="90" y="200" width="8" height="14" fill="#3d2510"/>
+        <rect x="70" y="225" width="8" height="14" fill="#3d2510"/>
+        <rect x="90" y="225" width="8" height="14" fill="#3d2510"/>
+
+        <rect x="200" y="150" width="70" height="350" fill="#1e1005"/>
+        <rect x="195" y="130" width="80" height="30" fill="#1e1005"/>
+        <polygon points="235,90 195,130 275,130" fill="#180d03"/>
+        <rect x="210" y="160" width="10" height="16" fill="#3d2510"/>
+        <rect x="235" y="160" width="10" height="16" fill="#3d2510"/>
+        <rect x="210" y="190" width="10" height="16" fill="#3d2510"/>
+        <rect x="235" y="190" width="10" height="16" fill="#3d2510"/>
+        <rect x="210" y="220" width="10" height="16" fill="#3d2510"/>
+        <rect x="235" y="220" width="10" height="16" fill="#3d2510"/>
+        <rect x="215" y="290" width="20" height="60" fill="#2a1508"/>
+
+        <!-- Bell tower far right -->
+        <rect x="1290" y="120" width="50" height="380" fill="#1a0e05"/>
+        <rect x="1285" y="100" width="60" height="30" fill="#1a0e05"/>
+        <rect x="1295" y="60" width="40" height="48" fill="#180d03"/>
+        <polygon points="1315,30 1295,60 1335,60" fill="#120902"/>
+        <rect x="1298" y="130" width="10" height="16" fill="#3d2510"/>
+        <rect x="1325" y="130" width="10" height="16" fill="#3d2510"/>
+        <rect x="1298" y="160" width="10" height="16" fill="#3d2510"/>
+        <rect x="1325" y="160" width="10" height="16" fill="#3d2510"/>
+
+        <rect x="1360" y="170" width="80" height="330" fill="#1e1005"/>
+        <rect x="1355" y="150" width="90" height="28" fill="#1e1005"/>
+        <polygon points="1400,110 1355,150 1445,150" fill="#180d03"/>
+        <rect x="1370" y="185" width="12" height="18" fill="#3d2510"/>
+        <rect x="1400" y="185" width="12" height="18" fill="#3d2510"/>
+        <rect x="1370" y="215" width="12" height="18" fill="#3d2510"/>
+        <rect x="1400" y="215" width="12" height="18" fill="#3d2510"/>
+      </g>
+
+      <!-- Mid buildings -->
+      <g opacity="0.7">
+        <!-- Large cathedral left -->
+        <rect x="0" y="80" width="140" height="420" fill="#1c0e04"/>
+        <rect x="140" y="160" width="60" height="340" fill="#1a0d03"/>
+        <rect x="0" y="60" width="140" height="30" fill="#1c0e04"/>
+        <polygon points="70,0 0,60 140,60" fill="#160b02"/>
+        <!-- Tower -->
+        <rect x="10" y="60" width="30" height="80" fill="#130902"/>
+        <rect x="100" y="60" width="30" height="80" fill="#130902"/>
+        <rect x="12" y="62" width="8" height="20" fill="#4a2810" opacity="0.8"/>
+        <rect x="22" y="62" width="8" height="20" fill="#4a2810" opacity="0.8"/>
+        <rect x="102" y="62" width="8" height="20" fill="#4a2810" opacity="0.8"/>
+        <rect x="118" y="62" width="8" height="20" fill="#4a2810" opacity="0.8"/>
+        <!-- Windows -->
+        <rect x="20" y="100" width="14" height="20" rx="7" fill="#5a3a18"/>
+        <rect x="50" y="100" width="14" height="20" rx="7" fill="#5a3a18"/>
+        <rect x="80" y="100" width="14" height="20" rx="7" fill="#5a3a18"/>
+        <rect x="110" y="100" width="14" height="20" rx="7" fill="#5a3a18"/>
+        <rect x="20" y="135" width="14" height="20" rx="7" fill="#4a2a10"/>
+        <rect x="50" y="135" width="14" height="20" rx="7" fill="#4a2a10"/>
+        <rect x="80" y="135" width="14" height="20" rx="7" fill="#4a2a10"/>
+        <rect x="110" y="135" width="14" height="20" rx="7" fill="#4a2a10"/>
+        <rect x="20" y="170" width="14" height="20" rx="7" fill="#5a3a18"/>
+        <rect x="50" y="170" width="14" height="20" rx="7" fill="#5a3a18"/>
+        <rect x="80" y="170" width="14" height="20" rx="7" fill="#5a3a18"/>
+        <rect x="110" y="170" width="14" height="20" rx="7" fill="#5a3a18"/>
+        <!-- Door -->
+        <rect x="52" y="280" width="36" height="70" rx="18" fill="#2a1508"/>
+
+        <!-- Row houses center-left -->
+        <rect x="300" y="220" width="80" height="280" fill="#1e1005"/>
+        <rect x="295" y="205" width="90" height="22" fill="#1a0e04"/>
+        <polygon points="340,170 295,205 385,205" fill="#150b02"/>
+        <rect x="310" y="230" width="12" height="18" fill="#3d2510"/>
+        <rect x="340" y="230" width="12" height="18" fill="#3d2510"/>
+        <rect x="310" y="260" width="12" height="18" fill="#3d2510"/>
+        <rect x="340" y="260" width="12" height="18" fill="#3d2510"/>
+        <rect x="310" y="290" width="12" height="18" fill="#3d2510"/>
+        <rect x="340" y="290" width="12" height="18" fill="#3d2510"/>
+        <rect x="322" y="360" width="16" height="40" fill="#2a1508"/>
+
+        <rect x="380" y="190" width="90" height="310" fill="#241205"/>
+        <rect x="375" y="172" width="100" height="25" fill="#1e1005"/>
+        <polygon points="425,135 375,172 475,172" fill="#180d03"/>
+        <rect x="393" y="202" width="13" height="19" fill="#3d2510"/>
+        <rect x="430" y="202" width="13" height="19" fill="#3d2510"/>
+        <rect x="393" y="233" width="13" height="19" fill="#3d2510"/>
+        <rect x="430" y="233" width="13" height="19" fill="#3d2510"/>
+        <rect x="393" y="264" width="13" height="19" fill="#4a3018"/>
+        <rect x="430" y="264" width="13" height="19" fill="#4a3018"/>
+        <rect x="393" y="295" width="13" height="19" fill="#3d2510"/>
+        <rect x="430" y="295" width="13" height="19" fill="#3d2510"/>
+        <rect x="403" y="370" width="20" height="50" fill="#2a1508"/>
+      </g>
+
+      <!-- Foreground buildings (darkest) -->
+      <g opacity="0.92">
+        <!-- Big building right of center -->
+        <rect x="850" y="130" width="120" height="370" fill="#160b02"/>
+        <rect x="845" y="110" width="130" height="28" fill="#160b02"/>
+        <polygon points="910,68 845,110 975,110" fill="#100802"/>
+        <rect x="858" y="145" width="15" height="22" fill="#4a2810"/>
+        <rect x="895" y="145" width="15" height="22" fill="#4a2810"/>
+        <rect x="932" y="145" width="15" height="22" fill="#4a2810"/>
+        <rect x="858" y="178" width="15" height="22" fill="#3a1e0a"/>
+        <rect x="895" y="178" width="15" height="22" fill="#4a2810"/>
+        <rect x="932" y="178" width="15" height="22" fill="#3a1e0a"/>
+        <rect x="858" y="211" width="15" height="22" fill="#4a2810"/>
+        <rect x="895" y="211" width="15" height="22" fill="#3a1e0a"/>
+        <rect x="932" y="211" width="15" height="22" fill="#4a2810"/>
+        <rect x="858" y="244" width="15" height="22" fill="#3a1e0a"/>
+        <rect x="895" y="244" width="15" height="22" fill="#4a2810"/>
+        <rect x="932" y="244" width="15" height="22" fill="#3a1e0a"/>
+        <rect x="880" y="330" width="24" height="70" fill="#200f04"/>
+
+        <!-- Tall narrow tower center -->
+        <rect x="680" y="100" width="45" height="400" fill="#1a0d03"/>
+        <rect x="675" y="80" width="55" height="28" fill="#1a0d03"/>
+        <rect x="683" y="40" width="39" height="48" fill="#160b02"/>
+        <polygon points="702,5 683,40 721,40" fill="#100802"/>
+        <rect x="684" y="112" width="10" height="16" fill="#3d2510"/>
+        <rect x="712" y="112" width="10" height="16" fill="#3d2510"/>
+        <rect x="684" y="140" width="10" height="16" fill="#3d2510"/>
+        <rect x="712" y="140" width="10" height="16" fill="#3d2510"/>
+        <rect x="684" y="168" width="10" height="16" fill="#4a2810"/>
+        <rect x="712" y="168" width="10" height="16" fill="#4a2810"/>
+        <rect x="684" y="196" width="10" height="16" fill="#3d2510"/>
+        <rect x="712" y="196" width="10" height="16" fill="#3d2510"/>
+        <rect x="690" y="310" width="15" height="50" fill="#200f04"/>
+
+        <!-- Right cluster -->
+        <rect x="1100" y="170" width="95" height="330" fill="#1c0e04"/>
+        <rect x="1095" y="152" width="105" height="26" fill="#1c0e04"/>
+        <polygon points="1148,115 1095,152 1200,152" fill="#160b02"/>
+        <rect x="1108" y="182" width="13" height="20" fill="#3d2510"/>
+        <rect x="1142" y="182" width="13" height="20" fill="#3d2510"/>
+        <rect x="1173" y="182" width="13" height="20" fill="#3d2510"/>
+        <rect x="1108" y="214" width="13" height="20" fill="#4a2810"/>
+        <rect x="1142" y="214" width="13" height="20" fill="#3d2510"/>
+        <rect x="1173" y="214" width="13" height="20" fill="#4a2810"/>
+        <rect x="1108" y="246" width="13" height="20" fill="#3d2510"/>
+        <rect x="1142" y="246" width="13" height="20" fill="#4a2810"/>
+        <rect x="1173" y="246" width="13" height="20" fill="#3d2510"/>
+        <rect x="1125" y="335" width="20" height="55" fill="#200f04"/>
+
+        <rect x="1195" y="200" width="70" height="300" fill="#1a0e04"/>
+        <rect x="1190" y="185" width="80" height="22" fill="#1a0e04"/>
+        <polygon points="1230,150 1190,185 1270,185" fill="#150b02"/>
+        <rect x="1204" y="212" width="11" height="17" fill="#3d2510"/>
+        <rect x="1235" y="212" width="11" height="17" fill="#3d2510"/>
+        <rect x="1204" y="240" width="11" height="17" fill="#3d2510"/>
+        <rect x="1235" y="240" width="11" height="17" fill="#3d2510"/>
+        <rect x="1204" y="268" width="11" height="17" fill="#4a2810"/>
+        <rect x="1235" y="268" width="11" height="17" fill="#4a2810"/>
+      </g>
+
+      <!-- Ground -->
+      <rect x="0" y="445" width="1440" height="55" fill="#0f0700"/>
+      <!-- Cobblestone hint -->
+      <rect x="0" y="458" width="1440" height="2" fill="#1a0e05" opacity="0.5"/>
+      <rect x="0" y="462" width="1440" height="2" fill="#1a0e05" opacity="0.5"/>
+      <rect x="0" y="466" width="1440" height="2" fill="#1a0e05" opacity="0.5"/>
+    </svg>
+  </div>
+</div>
+
+<!-- SCREEN 1: INTRO -->
+<div id="screen-intro">
+  <div class="intro-seal">
+    <svg viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M25 5 C14 5 5 14 5 25 C5 36 14 45 25 45 C36 45 45 36 45 25 C45 14 36 5 25 5Z" stroke="#c9a84c" stroke-width="1" fill="none"/>
+      <path d="M25 12 C18 12 12 18 12 25 C12 32 18 38 25 38 C32 38 38 32 38 25 C38 18 32 12 25 12Z" stroke="#c9a84c" stroke-width="0.5" fill="none"/>
+      <text x="25" y="29" text-anchor="middle" fill="#c9a84c" font-size="14" font-family="serif">✦</text>
+    </svg>
+  </div>
+  <p class="intro-label">HELLO!</p>
+  <h1 class="intro-title">Put on your airpods!</h1>
+  <p class="intro-sub">Before you open this!</p>
+  <button class="btn-ready" onclick="startJourney()">I'm wearing it!</button>
+</div>
+
+<!-- SCENE: Envelope -->
+<div id="scene">
+  <div id="envelope-wrap" onclick="openEnvelope()">
+    <p class="env-hint">✦ &nbsp; Letter &nbsp; ✦</p>
+    <div class="envelope">
+      <div class="env-body"></div>
+      <div class="env-flap" id="env-flap"></div>
+      <div class="env-seal" id="env-seal"></div>
+      <div class="env-address"><span>For you!</span></div>
+      <div class="env-stamp">🌺</div>
+    </div>
+  </div>
+</div>
+
+<!-- LETTER -->
+<div id="letter-wrap">
+  <div class="letter-paper">
+    <div class="letter-header">
+      <div class="letter-flourish">~ ✦ ~</div>
+      <div class="letter-date">June 4,2026</div>
+      <hr class="letter-divider">
+    </div>
+    <div class="letter-body">
+      <span class="salutation">Hello, Neyy!</span>
+
+      <p>So here I am again, making a website for you. This has got to be my love language at this point because I honestly don't know how else to respond when I make a mistake, so hopefully this does the trick.</p>
+
+      <p>First of all, of course, Rie, I want to apologize for treating you harshly last night. I was feeling drained and low on energy because of the toxicity in my family, and I know I shouldn't have let that affect the way I treated you.</p>
+
+      <p>I know you've been through a lot in the past, and the fact that I ended up doing something that may have reminded you of those experiences makes me feel terrible. There's one thing I promised myself, and that was to never let you go through something like that again. Yet I failed, and I'm truly sorry for that.</p>
+
+      <p>I hope you can forgive me and give me a second chance to prove myself. I really am sorry. I couldn't stop thinking about the way I treated you last night, and it's been bothering me ever since.</p>
+
+      <p>I hope you're doing okay, Rie. I hope you're feeling alright. I'm sorry, and I hope you have a wonderful morning.</p>
+
+      <p class="closing">Sorry again!</p>
+      <p class="signature">Good morning, Neyy! </p>
+    </div>
+    <div class="audio-notice">From neytann</div>
+  </div>
+</div>
+
+<!-- Close button -->
+<button class="letter-close-btn" id="close-btn" onclick="closeLetter()">✕ &nbsp; Close</button>
+
+<!-- Music indicator -->
+<div class="music-note" id="music-note">
+  <div class="note-dot"></div>
+  Playing background music...
+</div>
+
+<script>
+
+
+let voiceMuted = false;
+
+function toggleVoice() {
+  const btn = document.getElementById('voice-toggle');
+
+  if (!voiceMuted) {
+    voiceAudio.pause();
+    btn.textContent = '🔈 Turn Voice On';
+    voiceMuted = true;
+  } else {
+    voiceAudio.play().catch(() => {});
+    btn.textContent = '🔊 Turn Voice Off';
+    voiceMuted = false;
+  }
+}
+
+
+  // Generate stars
+  const starsContainer = document.getElementById('stars');
+  for (let i = 0; i < 80; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const size = Math.random() * 2 + 0.5;
+    s.style.cssText = `
+      width:${size}px; height:${size}px;
+      top:${Math.random() * 60}%;
+      left:${Math.random() * 100}%;
+      --d:${2 + Math.random() * 4}s;
+      --delay:${Math.random() * 4}s;
+      --min-o:${0.1 + Math.random() * 0.2};
+      --max-o:${0.6 + Math.random() * 0.4};
+    `;
+    starsContainer.appendChild(s);
+  }
+
+  const bgMusic = document.getElementById('bg-music');
+  const voiceAudio = document.getElementById('voice-audio');
+  let envelopeOpened = false;
+
+  function startJourney() {
+    // Try to play music
+    bgMusic.volume = 0.05
+        bgMusic.play().catch(() => {});
+
+    const intro = document.getElementById('screen-intro');
+    intro.classList.add('hidden');
+
+    setTimeout(() => {
+      const scene = document.getElementById('scene');
+      scene.classList.add('visible');
+    }, 800);
+  }
+
+  function openEnvelope() {
+    if (envelopeOpened) return;
+    envelopeOpened = true;
+
+    // Sparks
+    spawnSparks(window.event);
+
+    // Open flap
+    document.getElementById('env-flap').classList.add('open');
+    document.getElementById('env-seal').classList.add('hidden');
+    document.getElementById('envelope-wrap').style.cursor = 'default';
+
+    // Show letter after flap opens
+    setTimeout(() => {
+      document.getElementById('letter-wrap').classList.add('visible');
+      document.getElementById('close-btn').classList.add('visible');
+
+      // Play voice
+      voiceAudio.volume = 0.6;
+      voiceAudio.play().catch(() => {});
+
+      document.getElementById('voice-toggle').style.display = 'block';
+
+      // Music indicator
+      if (bgMusic.src && bgMusic.src !== window.location.href) {
+        document.getElementById('music-note').classList.add('visible');
+      }
+    }, 900);
+  }
+
+  function closeLetter() {
+    document.getElementById('letter-wrap').classList.remove('visible');
+    document.getElementById('close-btn').classList.remove('visible');
+    voiceAudio.pause();
+    voiceAudio.currentTime = 0;
+      document.getElementById('voice-toggle').style.display = 'none';
+  }
+
+
+
+  function spawnSparks(e) {
+    const cx = e ? e.clientX : window.innerWidth / 2;
+    const cy = e ? e.clientY : window.innerHeight / 2;
+    for (let i = 0; i < 14; i++) {
+      const spark = document.createElement('div');
+      spark.className = 'spark';
+      const angle = (Math.PI * 2 * i) / 14;
+      const dist = 40 + Math.random() * 60;
+      spark.style.cssText = `
+        left:${cx}px; top:${cy}px;
+        width:${3 + Math.random() * 4}px;
+        height:${3 + Math.random() * 4}px;
+        --tx:${Math.cos(angle) * dist}px;
+        --ty:${Math.sin(angle) * dist}px;
+        animation-duration:${0.4 + Math.random() * 0.4}s;
+      `;
+      document.body.appendChild(spark);
+      setTimeout(() => spark.remove(), 800);
+    }
+  }
+</script>
+
+<button id="voice-toggle" class="voice-toggle" onclick="toggleVoice()">
+   Turn Voice Off
+</button>
+
+</body>
+</html>
